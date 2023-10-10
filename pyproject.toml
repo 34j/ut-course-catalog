@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ut-course-catalog"
-version = "0.0.0"
+version = "0.1.0"
 description = "Python package for fetching UTokyo Online Course Catalogue"
 authors = ["34j <34j.95a2p@simplelogin.com>"]
 license = "MIT"
@@ -23,7 +23,15 @@ packages = [
 "Changelog" = "https://github.com/34j/ut-course-catalog/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9,<3.13"
+click = "^8.1.7"
+beautifulsoup4 = "^4.12.2"
+aiohttp = "^3.8.6"
+tenacity = "^8.2.3"
+aiofiles = "^23.2.1"
+tqdm = "^4.66.1"
+pandas = "^2.1.1"
+rich = "^13.6.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = ">=3"
@@ -37,6 +45,11 @@ optional = true
 myst-parser = ">=0.16"
 sphinx = ">=4.0"
 sphinx-rtd-theme = ">=1.0"
+
+
+[tool.poetry.group.wordcloud.dependencies]
+janome = "^0.5.0"
+wordcloud = "^1.9.2"
 
 [tool.semantic_release]
 branch = "main"
