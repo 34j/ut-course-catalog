@@ -18,6 +18,10 @@ packages = [
     { include = "ut_course_catalog", from = "src" },
 ]
 
+[tool.poetry.scripts]
+ut-course-catalog = "ut_course_catalog.cli:cli"
+utcc = "ut_course_catalog.cli:cli"
+
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/34j/ut-course-catalog/issues"
 "Changelog" = "https://github.com/34j/ut-course-catalog/blob/main/CHANGELOG.md"
