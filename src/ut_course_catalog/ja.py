@@ -121,7 +121,7 @@ class CommonCode(str):
                 "F": Institution.学部後期課程,
                 "G": Institution.大学院,
             }[self[0]]
-        except IndexError:
+        except Exception:
             return None
 
     @property
@@ -173,21 +173,21 @@ class CommonCode(str):
     def department_code(self) -> str | None:
         try:
             return self[4:6]
-        except IndexError:
+        except Exception:
             return None
 
     @property
     def level(self) -> str | None:
         try:
             return self[6]
-        except IndexError:
+        except Exception:
             return None
 
     @property
     def reference_number(self) -> str | None:
         try:
             return self[7:10]
-        except IndexError:
+        except Exception:
             return None
 
     @property
@@ -201,7 +201,7 @@ class CommonCode(str):
                 "T": ClassForm.卒業論文,
                 "Z": ClassForm.その他,
             }[self[10]]
-        except IndexError:
+        except Exception:
             return None
 
     @property
@@ -215,7 +215,7 @@ class CommonCode(str):
                 5: Language.OnlyOtherLanguages,
                 9: Language.Others,
             }[int(self[11])]
-        except IndexError:
+        except Exception:
             return None
 
     @property
