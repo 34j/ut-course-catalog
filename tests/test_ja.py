@@ -17,8 +17,10 @@ class TestJa(IsolatedAsyncioTestCase):
         await self.catalog.__aexit__(None, None, None)
 
     async def test_detail(self) -> None:
-        await self.catalog.fetch_detail("060320623", 2022)
-        # self.console.print(detail)
+        detail = await self.catalog.fetch_detail("060320623", 2022)
+        self.assertEqual(detail.時間割コード, "060320623")
+        self.assertEqual(detail.コース名, "材料力学")
+        self.console.print(detail)
 
     async def test_search(self) -> None:
         results = await self.catalog.fetch_search(
