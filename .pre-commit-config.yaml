@@ -75,3 +75,4 @@ repos:
     rev: "3.0.1"
     hooks:
       - id: nb-clean
+        args: [--preserve-cell-outputs]

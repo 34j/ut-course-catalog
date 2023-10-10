@@ -1,23 +1,27 @@
 from __future__ import annotations
 
 from enum import Enum, auto
+from logging import getLogger
 from typing import Any, Iterable
 
 import pandas as pd
+from PIL.Image import Image
+from tqdm.auto import tqdm
 
 from .ja import CommonCode
 
+LOG = getLogger(__name__)
+
 
 def create_wordcloud(
-    params: Any, txt: str, *, size: tuple[int, int] = (1200, 900), **kwargs: Any
-) -> None:
+    txt: str, *, size: tuple[int, int] = (1200, 900), **kwargs: Any
+) -> Image:
     from janome.tokenizer import Tokenizer
     from wordcloud import WordCloud
 
     t = Tokenizer()
-    tokens = t.tokenize(txt)
     words = {}
-    for token in tokens:
+    for token in tqdm(t.tokenize(txt), desc="Tokenizing"):
         data = str(token).split()[1].split(",")
         if data[0] == "名詞":
             key = data[6]
@@ -30,7 +34,7 @@ def create_wordcloud(
     wordcloud = WordCloud(
         font_path=font_path, width=size[0], height=size[1], **kwargs
     ).generate_from_frequencies(words)
-    wordcloud.to_file(filename="analysis/" + params.id() + "_wordcloud.jpg")
+    return wordcloud.to_image()
 
 
 class ScoringMethod(Enum):
