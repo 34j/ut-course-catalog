@@ -7,7 +7,7 @@ import pickle  # nosec
 import re
 from asyncio import create_task
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 from enum import Enum
 from inspect import isawaitable
@@ -41,6 +41,12 @@ from typing_extensions import Self
 from ut_course_catalog.common import BASE_URL, Semester, Weekday
 
 from .common import Language, RateLimitter
+
+
+def current_fiscal_year() -> int:
+    """Returns current fiscal year"""
+    now = datetime.now()
+    return now.year if now.month >= 4 else now.year - 1
 
 
 class Institution(Enum):
@@ -881,7 +887,9 @@ class UTCourseCatalog:
                 current_page=page,
             )
 
-    async def fetch_detail(self, code: str, year: int = 2022) -> Details:
+    async def fetch_detail(
+        self, code: str, year: int = current_fiscal_year()
+    ) -> Details:
         """Fetch details of a course.
 
         Parameters
@@ -889,7 +897,7 @@ class UTCourseCatalog:
         code : str
             Course (common) code.
         year : int, optional
-            Year of the course, by default 2022.
+            Year of the course, by default current_fiscal_year().
 
         Returns
         -------
@@ -1084,7 +1092,7 @@ class UTCourseCatalog:
         self,
         params: SearchParams,
         *,
-        year: int = 2022,
+        year: int = current_fiscal_year(),
         use_tqdm: bool = True,
         on_initial_request: None
         | (Callable[[SearchResult], Awaitable[None] | None]) = None,
@@ -1097,7 +1105,7 @@ class UTCourseCatalog:
         params : SearchParams
             Search parameters
         year : int, optional
-            Year of the course, by default 2022
+            Year of the course, by default current_fiscal_year()
         use_tqdm : bool, optional
             Whether to use tqdm, by default True
         on_initial_request : Optional[Callable[[SearchResult], Optional[Awaitable]]], optional
@@ -1163,7 +1171,7 @@ class UTCourseCatalog:
         self,
         params: SearchParams,
         *,
-        year: int = 2022,
+        year: int = current_fiscal_year(),
         filename: str | None = None,
         use_tqdm: bool = True,
         on_initial_request: None | (Callable[[SearchResult], Awaitable | None]) = None,
@@ -1176,7 +1184,7 @@ class UTCourseCatalog:
         params : SearchParams
             Search parameters
         year : int, optional
-            Year of the course, by default 2022
+            Year of the course, by default current_fiscal_year()
         filename : Optional[str], optional
             Filename to save the results, by default None. If None, the filename is params.id() + ".pkl".
         use_tqdm : bool, optional
@@ -1214,7 +1222,7 @@ class UTCourseCatalog:
         self,
         params: SearchParams,
         *,
-        year: int = 2022,
+        year: int = current_fiscal_year(),
         filename: str | None = None,
         use_tqdm: bool = True,
         on_initial_request: None | (Callable[[SearchResult], Awaitable | None]) = None,
