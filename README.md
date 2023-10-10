@@ -34,10 +34,26 @@ Python package for fetching UTokyo Online Course Catalogue
 
 ## Installation
 
-Install this via pip (or your favourite package manager):
+Install this via pipx or pip (or your favourite package manager):
 
 ```shell
-pip install ut-course-catalog
+pipx install ut-course-catalog
+```
+
+## Dataset
+
+- 東京大学授業カタログはインターネット上で公開されており、誰でも無償で入手可能でした。
+- robots.txtの内容は寛容的であり、ページはWayback Machineに登録されているため、情報収集は禁止されていないと考えられました。
+
+したがって、著作権法第三十条の四に基づいて、[データセット](https://www.kaggle.com/datasets/mkrjas/utokyosyllabus)をKaggleに公開しています。適当に解析したノートブック[(GitHub)](ut-course-catalog-tutorial.ipynb)もあります。
+
+## Usage
+
+1秒に1回のリクエストを送る場合、ダウンロードには4時間強かかります。負荷軽減のため、なるべく収集済みのデータセットを御利用ください。
+
+```shell
+ut-course-catalog download
+ut-course-catalog convert all.pkl
 ```
 
 ## Contributors ✨
