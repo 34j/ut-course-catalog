@@ -29,9 +29,12 @@ def convert(name: str) -> None:
     import pickle  # nosec
     from pathlib import Path
 
+    from ut_course_catalog.analysis import to_perfect_isolated_dataframe
+
     path = Path(name)
     with path.open("rb") as f:
         df = pickle.load(f)  # nosec
+        df = to_perfect_isolated_dataframe(df)
         df.to_csv(path.with_suffix(".csv"))
 
 
