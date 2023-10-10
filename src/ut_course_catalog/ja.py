@@ -27,6 +27,8 @@ from typing import (
 
 import aiofiles
 import aiohttp
+from aiohttp_client_cache import SQLiteBackend
+from aiohttp_client_cache.session import CachedSession
 from bs4 import BeautifulSoup, ResultSet, Tag
 from pandas import DataFrame
 from tenacity import WrappedFn, retry
@@ -675,17 +677,24 @@ class UTCourseCatalog:
     _rate_limitter: RateLimitter
 
     def __init__(
-        self, logger_level: int = 0, min_interval: timedelta | int = 1
+        self,
+        logger_level: int = 0,
+        min_interval: timedelta | int = 1,
+        session: aiohttp.ClientSession | None = None,
     ) -> None:
-        self.session = None
+        self.session = session
         self._logger = getLogger(__name__)
         self._logger.setLevel(logger_level)
         self._rate_limitter = RateLimitter(min_interval=min_interval)
 
     async def __aenter__(self) -> Self:
-        if self.session:
-            raise RuntimeError("__aenter__ called twice")
-        self.session = aiohttp.ClientSession()
+        if self.session is None:
+            self.session = CachedSession(
+                cache=SQLiteBackend(
+                    cache_name="~/.cache/ut_course_catalog/cache.sqlite"
+                ),
+                logger=self._logger,
+            )
         await self.session.__aenter__()
         return self
 
