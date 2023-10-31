@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.2 (2023-10-31)
+
+### Fix
+
+- Update dependency aiohttp-client-cache to ^0.10.0 (#22) ([`3a5ddf9`](https://github.com/34j/ut-course-catalog/commit/3a5ddf90dd52d4ab32bd61927d0b6f067d019c34))
+
 ## v0.2.1 (2023-10-27)
 
 ### Fix
