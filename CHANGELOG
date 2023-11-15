@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.4 (2023-11-15)
+
+### Fix
+
+- Update dependency rich to v13.7.0 (#29) ([`7e2b051`](https://github.com/34j/ut-course-catalog/commit/7e2b051e17aba8d554cbf86c1c065b212f2fb7e5))
+
 ## v0.2.3 (2023-11-11)
 
 ### Fix
