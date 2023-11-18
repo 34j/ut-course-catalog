@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ut-course-catalog"
-version = "0.2.4"
+version = "0.2.5"
 description = "Python package for fetching UTokyo Online Course Catalogue"
 authors = ["34j <34j.95a2p@simplelogin.com>"]
 license = "MIT"
