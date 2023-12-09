@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.8 (2023-12-09)
+
+### Fix
+
+- Update python to ^3.9, &lt;3.13 (#8) ([`f32c08e`](https://github.com/34j/ut-course-catalog/commit/f32c08edc7b72a4373951141744018a08c9df4e9))
+
 ## v0.2.7 (2023-12-08)
 
 ### Fix
