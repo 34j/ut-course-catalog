@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.9 (2024-01-18)
+
+### Fix
+
+- Update dependency beautifulsoup4 to v4.12.3 (#61) ([`fc4abad`](https://github.com/34j/ut-course-catalog/commit/fc4abad0e2d5a9d532c6fa3279f782475d45d7bf))
+
 ## v0.2.8 (2023-12-09)
 
 ### Fix
