@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ut-course-catalog"
-version = "0.2.16"
+version = "0.2.6"
 description = "Python package for fetching UTokyo Online Course Catalogue"
 authors = ["34j <34j.95a2p@simplelogin.com>"]
 license = "MIT"
@@ -27,7 +27,7 @@ utcc = "ut_course_catalog.cli:cli"
 "Changelog" = "https://github.com/34j/ut-course-catalog/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
-python = "^3.9, <3.13"
+python = "^3.9,<3.12"
 click = "^8.1.7"
 beautifulsoup4 = "^4.12.2"
 aiohttp = "^3.8.6"
@@ -36,7 +36,7 @@ aiofiles = "^23.2.1"
 tqdm = "^4.66.1"
 pandas = "^2.1.1"
 rich = "^13.6.0"
-aiohttp-client-cache = {extras = ["all"], version = "^0.11.0"}
+aiohttp-client-cache = {extras = ["all"], version = "^0.10.0"}
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = ">=3"
