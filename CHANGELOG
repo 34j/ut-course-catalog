@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.17 (2024-10-30)
+
+### Fix
+
+- Update dependency pandas to v2.2.3 (#93) ([`0e38b07`](https://github.com/34j/ut-course-catalog/commit/0e38b0790ab772c512eaec4a08502daf024f3e90))
+
 ## v0.2.16 (2024-03-26)
 
 ### Fix
