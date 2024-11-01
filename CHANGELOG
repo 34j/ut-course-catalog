@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.22 (2024-11-01)
+
+### Fix
+
+- Update dependency tenacity to v8.5.0 (#108) ([`7770619`](https://github.com/34j/ut-course-catalog/commit/7770619671b11dca42b6a8af63d42bfc93a4e3d7))
+
 ## v0.2.21 (2024-11-01)
 
 ### Fix
