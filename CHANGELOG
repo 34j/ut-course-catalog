@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.24 (2024-11-15)
+
+### Fix
+
+- Update dependency aiohttp to v3.11.2 (#115) ([`aca1c73`](https://github.com/34j/ut-course-catalog/commit/aca1c73dc6d135af37b47fce7ef5be3cfd5c2e6d))
+
 ## v0.2.23 (2024-11-15)
 
 ### Fix
