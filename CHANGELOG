@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.25 (2024-11-15)
+
+### Fix
+
+- Update dependency tqdm to v4.67.0 (#116) ([`ad4ed83`](https://github.com/34j/ut-course-catalog/commit/ad4ed83fca020468096f7544edb3b7d1591dff00))
+
 ## v0.2.24 (2024-11-15)
 
 ### Fix
