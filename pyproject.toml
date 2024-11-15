@@ -27,7 +27,7 @@ utcc = "ut_course_catalog.cli:cli"
 "Changelog" = "https://github.com/34j/ut-course-catalog/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
-python = "^3.9, <3.13"
+python = "<3.14"
 click = "^8.1.7"
 beautifulsoup4 = "^4.12.2"
 aiohttp = "^3.8.6"
