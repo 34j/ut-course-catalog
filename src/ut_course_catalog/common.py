@@ -93,8 +93,10 @@ class RateLimitter:
 
     def wraps(
         self,
-        func: WrappedFn[WrappedFnParam, WrappedFnResult]
-        | WrappedAwaitableFn[WrappedFnParam, WrappedFnResult],
+        func: (
+            WrappedFn[WrappedFnParam, WrappedFnResult]
+            | WrappedAwaitableFn[WrappedFnParam, WrappedFnResult]
+        ),
     ) -> WrappedFn[WrappedFnParam, WrappedFnResult]:
         @wraps(func)
         async def wrapper(
