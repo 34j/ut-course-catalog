@@ -61,7 +61,16 @@ def parse_scoring_method(text: str | None) -> set[ScoringMethod]:
         ScoringMethod.課題: ["課題", "assign", "宿題"],
         ScoringMethod.レポート: ["レポート", "レポ", "report"],
         ScoringMethod.発表: ["発表", "presenta", "プレゼン"],
-        ScoringMethod.出席: ["出席", "発表", "参加", "attend", "平常", "出欠", "リアペ", "リアクション"],
+        ScoringMethod.出席: [
+            "出席",
+            "発表",
+            "参加",
+            "attend",
+            "平常",
+            "出欠",
+            "リアペ",
+            "リアクション",
+        ],
     }
     result: set[ScoringMethod] = set()
     if text is None:
@@ -95,7 +104,11 @@ def encode_common_code(common_codes: pd.Series[CommonCode]) -> pd.DataFrame:
 def to_perfect_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df = pd.concat(
-        [df, encode_scoring_method(df["成績評価方法"]), encode_common_code(df["共通科目コード"])],
+        [
+            df,
+            encode_scoring_method(df["成績評価方法"]),
+            encode_common_code(df["共通科目コード"]),
+        ],
         axis=1,
     )
     return df
