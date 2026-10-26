@@ -649,7 +649,9 @@ def _parse_weekday_period(period_text: str) -> set[tuple[Weekday, int]]:
     period_texts = period_text.split("、")
 
     def parse_one(period: str) -> tuple[Weekday, int] | None:
-        w = Weekday([weekday in period for weekday in list("月火水木金土日")].index(True))
+        w = Weekday(
+            [weekday in period for weekday in list("月火水木金土日")].index(True)
+        )
         reres = re.search(r"\d+", period)
         if not reres:
             # raise ValueError(f"Invalid period: {period}")
@@ -778,7 +780,9 @@ class UTCourseCatalog:
                 x.value * 100 + 1000 for x in iterable_or_type_to_iterable(params.曜日)
             ]
         if params.講義使用言語:
-            facet["course_language_codes"] = iterable_or_type_to_iterable(params.講義使用言語)
+            facet["course_language_codes"] = iterable_or_type_to_iterable(
+                params.講義使用言語
+            )
         if params.実務経験のある教員による授業科目:
             facet["operational_experience_flag"] = iterable_or_type_to_iterable(
                 params.実務経験のある教員による授業科目
@@ -1094,8 +1098,9 @@ class UTCourseCatalog:
         *,
         year: int = current_fiscal_year(),
         use_tqdm: bool = True,
-        on_initial_request: None
-        | (Callable[[SearchResult], Awaitable[None] | None]) = None,
+        on_initial_request: None | (
+            Callable[[SearchResult], Awaitable[None] | None]
+        ) = None,
         on_detail_request: Callable[[Details], Awaitable[None] | None] | None = None,
     ) -> Iterable[Details]:
         """Fetch all search results by repeatedly calling `fetch_search` and `fetch_detail`.
@@ -1144,7 +1149,9 @@ class UTCourseCatalog:
             async def inner(item):
                 async with s:
                     try:
-                        details = await self.retry(self.fetch_detail)(item.時間割コード, year)
+                        details = await self.retry(self.fetch_detail)(
+                            item.時間割コード, year
+                        )
                     except Exception as e:
                         self._logger.error(e)
                         return None
