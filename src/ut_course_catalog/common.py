@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import asyncio
+from collections.abc import AsyncIterable, Awaitable, Callable, Coroutine, Iterable
 from datetime import datetime, timedelta
 from enum import Enum, IntEnum
 from functools import wraps
-from typing import Any, AsyncIterable, Awaitable, Callable, Coroutine, Iterable, TypeVar
+from typing import TypeVar
 
 from typing_extensions import ParamSpec
 
@@ -58,6 +59,7 @@ class RateLimitter:
         ----------
         min_interval : Union[timedelta, int]
             Minimum interval between calls. If int, it is treated as seconds.
+
         """
         if isinstance(min_interval, int):
             min_interval = timedelta(seconds=min_interval)
@@ -111,7 +113,7 @@ class RateLimitter:
         await self.wait()
         return self
 
-    async def __aexit__(self, *args: Any) -> None:
+    async def __aexit__(self, *args: object) -> None:
         pass
 
 

@@ -6,6 +6,7 @@ import math
 import pickle  # nosec
 import re
 from asyncio import create_task
+from collections.abc import AsyncIterable, Awaitable, Callable, Iterable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -15,12 +16,9 @@ from logging import Logger, getLogger
 from pathlib import Path
 from typing import (
     Any,
-    AsyncIterable,
-    Awaitable,
-    Callable,
-    Iterable,
     NamedTuple,
     Optional,
+    Self,
     TypeVar,
     Union,
 )
@@ -36,7 +34,6 @@ from tenacity.before_sleep import before_sleep_log
 from tenacity.stop import stop_after_attempt, stop_after_delay
 from tenacity.wait import wait_exponential
 from tqdm import tqdm
-from typing_extensions import Self
 
 from ut_course_catalog.common import BASE_URL, Semester, Weekday
 
@@ -99,8 +96,7 @@ class Faculty(Enum):
                 return v
         if value == "教養学部（前期課程）":
             return cls.教養学部前期課程
-        else:
-            raise ValueError(f"'{cls.__name__}' enum not found for '{value}'")
+        raise ValueError(f"'{cls.__name__}' enum not found for '{value}'")
 
 
 class ClassForm(Enum):
@@ -267,9 +263,7 @@ class CommonCode(str):
         }
 
     @staticmethod
-    def parse_department(
-        faculty: Faculty, department_code: str
-    ) -> dict[Faculty, dict[str, str]]:
+    def parse_department(faculty: Faculty, department_code: str) -> dict[Faculty, dict[str, str]]:
         d = {
             Faculty.教養学部前期課程: {
                 "FC": "基礎科目",
@@ -560,7 +554,8 @@ class SearchResult(NamedTuple):
 
 class Details(NamedTuple):
     """Details of a course. Contains all available information for a course on the website.
-    (UTAS may have more information)"""
+    (UTAS may have more information)
+    """
 
     時間割コード: str
     共通科目コード: CommonCode
@@ -696,15 +691,13 @@ class UTCourseCatalog:
     async def __aenter__(self) -> Self:
         if self.session is None:
             self.session = CachedSession(
-                cache=SQLiteBackend(
-                    cache_name="~/.cache/ut_course_catalog/cache.sqlite"
-                ),
+                cache=SQLiteBackend(cache_name="~/.cache/ut_course_catalog/cache.sqlite"),
                 logger=self._logger,
             )
         await self.session.__aenter__()
         return self
 
-    async def __aexit__(self, *args: Any) -> None:
+    async def __aexit__(self, *args: object) -> None:
         self._check_client()
         if self.session is None:
             raise RuntimeError("__aenter__ not called")
@@ -734,6 +727,7 @@ class UTCourseCatalog:
         ------
         ParserError
             Raises when failed to parse the website.
+
         """
         self._check_client()
         if self.session is None:
@@ -766,13 +760,9 @@ class UTCourseCatalog:
         if params.学年:
             facet["grades_codes"] = iterable_or_type_to_iterable(params.学年)
         if params.学期:
-            facet["semester_codes"] = [
-                s.value for s in iterable_or_type_to_iterable(params.学期)
-            ]
+            facet["semester_codes"] = [s.value for s in iterable_or_type_to_iterable(params.学期)]
         if params.時限:
-            facet["period_codes"] = [
-                x - 1 for x in iterable_or_type_to_iterable(params.時限)
-            ]
+            facet["period_codes"] = [x - 1 for x in iterable_or_type_to_iterable(params.時限)]
         if params.曜日 is not None:
             facet["wday_codes"] = [
                 x.value * 100 + 1000 for x in iterable_or_type_to_iterable(params.曜日)
@@ -814,26 +804,20 @@ class UTCourseCatalog:
             page_info_match: list[str] = re.findall(r"\d+", page_info_text)
             current_items_first_index = int(page_info_match[0])
             current_items_last_index = int(page_info_match[1])
-            current_items_count = (
-                current_items_last_index - current_items_first_index + 1
-            )
+            current_items_count = current_items_last_index - current_items_first_index + 1
             total_items_count = int(page_info_match[2])
             total_pages = math.ceil(total_items_count / 10)
 
             def get_items() -> Iterable[SearchResultItem]:
                 """Get search result items."""
-                container = soup.find(
-                    "div", class_="catalog-search-result-card-container"
-                )
+                container = soup.find("div", class_="catalog-search-result-card-container")
                 if container is None:
                     return
                 if type(container) is not Tag:
                     raise ParserError(f"container not found: {container}")
                 cards = container.find_all("div", class_="catalog-search-result-card")
                 for card in cards:
-                    cells_parent: Tag = card.find_all(
-                        class_="catalog-search-result-table-row"
-                    )[1]
+                    cells_parent: Tag = card.find_all(class_="catalog-search-result-table-row")[1]
                     if not cells_parent:
                         continue
 
@@ -851,9 +835,7 @@ class UTCourseCatalog:
                     code_cell_children = list(code_cell.children)
                     yield SearchResultItem(
                         ねらい=_format_description(
-                            card.find(
-                                class_="catalog-search-result-card-body-text"
-                            ).text
+                            card.find(class_="catalog-search-result-card-body-text").text
                         ),
                         時間割コード=code_cell_children[1].text,
                         共通科目コード=CommonCode(code_cell_children[3].text),
@@ -861,9 +843,7 @@ class UTCourseCatalog:
                         教員=get_cell_text("lecturer"),
                         学期={
                             Semester(el.text.replace(" ", "").replace("\n", ""))
-                            for el in get_cell("semester").find_all(
-                                class_="catalog-semester-icon"
-                            )
+                            for el in get_cell("semester").find_all(class_="catalog-semester-icon")
                         },
                         曜限=set(_parse_weekday_period(get_cell_text("period"))),
                     )
@@ -887,9 +867,7 @@ class UTCourseCatalog:
                 current_page=page,
             )
 
-    async def fetch_detail(
-        self, code: str, year: int = current_fiscal_year()
-    ) -> Details:
+    async def fetch_detail(self, code: str, year: int = current_fiscal_year()) -> Details:
         """Fetch details of a course.
 
         Parameters
@@ -908,6 +886,7 @@ class UTCourseCatalog:
         ------
         ParserError
             Raises when the parser fails to parse the website.
+
         """
         self._check_client()
         if self.session is None:
@@ -958,7 +937,7 @@ class UTCourseCatalog:
             cards = dict(get_cards())
 
             def get_card(name: str) -> Tag | None:
-                return cards.get(name, None)
+                return cards.get(name)
 
             def get_card_text(name: str) -> str | None:
                 card = get_card(name)
@@ -993,9 +972,7 @@ class UTCourseCatalog:
                 参考書=get_card_text("参考書"),
                 履修上の注意=get_card_text("履修上の注意"),
                 ねらい=_format(
-                    _ensure_found(
-                        soup.find(class_="catalog-page-detail-lecture-aim")
-                    ).text
+                    _ensure_found(soup.find(class_="catalog-page-detail-lecture-aim")).text
                 ),
             )
 
@@ -1006,6 +983,7 @@ class UTCourseCatalog:
         -------
         CommonCode
             Common code of the course
+
         """
         result = await self.fetch_search(SearchParams(keyword=時間割コード))
         return result.items[0].共通科目コード
@@ -1017,6 +995,7 @@ class UTCourseCatalog:
         -------
         str
             Time table code of the course
+
         """
         result = await self.fetch_search(SearchParams(keyword=共通科目コード))
         return result.items[0].時間割コード
@@ -1055,6 +1034,7 @@ class UTCourseCatalog:
         ------
         Iterator[AsyncIterable[SearchResultItem]]
             Async iterable of search results
+
         """
         pbar = tqdm(disable=not use_tqdm)
         result = await self.fetch_search(params)
@@ -1075,7 +1055,7 @@ class UTCourseCatalog:
                     search = await self.retry(self.fetch_search)(params, page)
                 except Exception as e:
                     self._logger.exception(e)
-                    self._logger.error(f"Failed to fetch page {page}")
+                    self._logger.error("Failed to fetch page %s", page)
                     return None
                 pbar.update(1)
                 return search
@@ -1094,8 +1074,7 @@ class UTCourseCatalog:
         *,
         year: int = current_fiscal_year(),
         use_tqdm: bool = True,
-        on_initial_request: None
-        | (Callable[[SearchResult], Awaitable[None] | None]) = None,
+        on_initial_request: None | (Callable[[SearchResult], Awaitable[None] | None]) = None,
         on_detail_request: Callable[[Details], Awaitable[None] | None] | None = None,
     ) -> Iterable[Details]:
         """Fetch all search results by repeatedly calling `fetch_search` and `fetch_detail`.
@@ -1120,8 +1099,8 @@ class UTCourseCatalog:
         ------
         Iterator[AsyncIterable[Details]]
             Async iterable of details
-        """
 
+        """
         pbar = tqdm(disable=not use_tqdm)
 
         async def on_initial_request_wrapper(search_result: SearchResult):
@@ -1201,9 +1180,10 @@ class UTCourseCatalog:
         ------
         Iterator[AsyncIterable[Details]]
             Async iterable of details
+
         """
         filepath = self.get_filepath(params, filename)
-        self._logger.info(f"Saving to {filepath}")
+        self._logger.info("Saving to %s", filepath)
         result = await self.fetch_search_detail_all(
             params,
             year=year,
@@ -1215,7 +1195,7 @@ class UTCourseCatalog:
                 await f.write(pickle.dumps(result))
         except Exception as e:
             self._logger.error(e)
-            self._logger.error(f"Skipping saving to {filepath}")
+            self._logger.error("Skipping saving to %s", filepath)
         return result
 
     async def fetch_and_save_search_detail_all_pandas(
@@ -1245,9 +1225,9 @@ class UTCourseCatalog:
         try:
             filepath = self.get_filepath(params, filename)
             filepath = filepath.with_suffix(".pandas.pkl")
-            self._logger.info(f"Saving to {filepath}")
+            self._logger.info("Saving to %s", filepath)
             df.to_pickle(filepath.absolute())
         except Exception as e:
             self._logger.error(e)
-            self._logger.error(f"Skipping saving to {filename}")
+            self._logger.error("Skipping saving to %s", filename)
         return df

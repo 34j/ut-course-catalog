@@ -1,4 +1,4 @@
-__version__ = "0.1.0"
+__version__ = "0.2.25"
 
 from .common import BASE_URL, Semester, Weekday
 from .ja import (
@@ -13,15 +13,15 @@ from .ja import (
 )
 
 __all__ = [
-    "Semester",
-    "Weekday",
     "BASE_URL",
-    "UTCourseCatalog",
-    "SearchParams",
+    "ClassForm",
+    "CommonCode",
     "Details",
     "Faculty",
     "Institution",
-    "ClassForm",
     "Language",
-    "CommonCode",
+    "SearchParams",
+    "Semester",
+    "UTCourseCatalog",
+    "Weekday",
 ]

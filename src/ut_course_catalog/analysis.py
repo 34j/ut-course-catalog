@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from enum import Enum, auto
 from logging import getLogger
-from typing import Any, Iterable
+from typing import Any
 
 import pandas as pd
 from PIL.Image import Image
@@ -13,9 +14,7 @@ from .ja import CommonCode
 LOG = getLogger(__name__)
 
 
-def create_wordcloud(
-    txt: str, *, size: tuple[int, int] = (1200, 900), **kwargs: Any
-) -> Image:
+def create_wordcloud(txt: str, *, size: tuple[int, int] = (1200, 900), **kwargs: Any) -> Image:
     from janome.tokenizer import Tokenizer
     from wordcloud import WordCloud
 
@@ -61,7 +60,16 @@ def parse_scoring_method(text: str | None) -> set[ScoringMethod]:
         ScoringMethod.課題: ["課題", "assign", "宿題"],
         ScoringMethod.レポート: ["レポート", "レポ", "report"],
         ScoringMethod.発表: ["発表", "presenta", "プレゼン"],
-        ScoringMethod.出席: ["出席", "発表", "参加", "attend", "平常", "出欠", "リアペ", "リアクション"],
+        ScoringMethod.出席: [
+            "出席",
+            "発表",
+            "参加",
+            "attend",
+            "平常",
+            "出欠",
+            "リアペ",
+            "リアクション",
+        ],
     }
     result: set[ScoringMethod] = set()
     if text is None:
