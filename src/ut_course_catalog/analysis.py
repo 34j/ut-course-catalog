@@ -1,23 +1,20 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from enum import Enum, auto
 from logging import getLogger
-from typing import Any, Iterable
+from typing import Any
 
 import pandas as pd
 from PIL.Image import Image
 from tqdm.auto import tqdm
 
-from .ja import CommonCode
-
 LOG = getLogger(__name__)
 
 
-def create_wordcloud(
-    txt: str, *, size: tuple[int, int] = (1200, 900), **kwargs: Any
-) -> Image:
-    from janome.tokenizer import Tokenizer
-    from wordcloud import WordCloud
+def create_wordcloud(txt: str, *, size: tuple[int, int] = (1200, 900), **kwargs: Any) -> Image:
+    from janome.tokenizer import Tokenizer  # ty: ignore[import-not-found]
+    from wordcloud import WordCloud  # ty: ignore[import-not-found]
 
     t = Tokenizer()
     words = {}
@@ -61,7 +58,16 @@ def parse_scoring_method(text: str | None) -> set[ScoringMethod]:
         ScoringMethod.課題: ["課題", "assign", "宿題"],
         ScoringMethod.レポート: ["レポート", "レポ", "report"],
         ScoringMethod.発表: ["発表", "presenta", "プレゼン"],
-        ScoringMethod.出席: ["出席", "発表", "参加", "attend", "平常", "出欠", "リアペ", "リアクション"],
+        ScoringMethod.出席: [
+            "出席",
+            "発表",
+            "参加",
+            "attend",
+            "平常",
+            "出欠",
+            "リアペ",
+            "リアクション",
+        ],
     }
     result: set[ScoringMethod] = set()
     if text is None:
@@ -75,7 +81,7 @@ def parse_scoring_method(text: str | None) -> set[ScoringMethod]:
     return result
 
 
-def encode_scoring_method(texts: pd.Series[str]) -> pd.DataFrame:
+def encode_scoring_method(texts: pd.Series) -> pd.DataFrame:
     methods = texts.apply(lambda x: list(parse_scoring_method(x)))
     columns = []
     for method in ScoringMethod:
@@ -86,7 +92,7 @@ def encode_scoring_method(texts: pd.Series[str]) -> pd.DataFrame:
     return df
 
 
-def encode_common_code(common_codes: pd.Series[CommonCode]) -> pd.DataFrame:
+def encode_common_code(common_codes: pd.Series) -> pd.DataFrame:
     df = pd.DataFrame(common_codes.apply(lambda x: x._asdict() if x else {}).to_list())
     df.rename(columns={"講義使用言語": "講義使用言語_"}, inplace=True)
     return df

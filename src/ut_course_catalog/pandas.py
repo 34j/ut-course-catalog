@@ -1,4 +1,5 @@
-from typing import Iterable, NamedTuple
+from collections.abc import Iterable
+from typing import NamedTuple
 
 import pandas as pd
 

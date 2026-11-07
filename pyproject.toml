@@ -1,134 +1,92 @@
-[tool.poetry]
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools>=77.0.3" ]
+
+[project]
 name = "ut-course-catalog"
 version = "0.2.25"
 description = "Python package for fetching UTokyo Online Course Catalogue"
-authors = ["34j <34j.95a2p@simplelogin.com>"]
-license = "MIT"
 readme = "README.md"
-repository = "https://github.com/34j/ut-course-catalog"
-documentation = "https://ut-course-catalog.readthedocs.io"
+license = "MIT"
+authors = [ { name = "34j" } ]
+requires-python = ">=3.12"
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
-    "Intended Audience :: Developers",
-    "Natural Language :: English",
-    "Operating System :: OS Independent",
-    "Topic :: Software Development :: Libraries",
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Libraries",
 ]
-packages = [
-    { include = "ut_course_catalog", from = "src" },
+dependencies = [
+  "aiofiles>=23.2.1,<24",
+  "aiohttp>=3.8.6,<4",
+  "aiohttp-client-cache[all]>=0.12,<1",
+  "beautifulsoup4>=4.12.2,<5",
+  "click>=8.1.7,<9",
+  "pandas>=2.1.1,<3",
+  "pillow>=10,<12",
+  "rich>=13.6,<14",
+  "tenacity>=8.2.3,<9",
+  "tqdm>=4.66.1,<5",
+  "typing-extensions>=4.8,<5",
 ]
+urls."Bug Tracker" = "https://github.com/34j/ut-course-catalog/issues"
+urls.Changelog = "https://github.com/34j/ut-course-catalog/blob/main/CHANGELOG.md"
+urls.documentation = "https://ut-course-catalog.readthedocs.io"
+urls.repository = "https://github.com/34j/ut-course-catalog"
+scripts.ut-course-catalog = "ut_course_catalog.cli:cli"
+scripts.utcc = "ut_course_catalog.cli:cli"
 
-[tool.poetry.scripts]
-ut-course-catalog = "ut_course_catalog.cli:cli"
-utcc = "ut_course_catalog.cli:cli"
-
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/34j/ut-course-catalog/issues"
-"Changelog" = "https://github.com/34j/ut-course-catalog/blob/main/CHANGELOG.md"
-
-[tool.poetry.dependencies]
-python = "^3.9, <3.13"
-click = "^8.1.7"
-beautifulsoup4 = "^4.12.2"
-aiohttp = "^3.8.6"
-tenacity = "^8.2.3"
-aiofiles = "^23.2.1"
-tqdm = "^4.66.1"
-pandas = "^2.1.1"
-rich = "^13.6.0"
-aiohttp-client-cache = {extras = ["all"], version = "^0.12.0"}
-
-[tool.poetry.group.dev.dependencies]
-pre-commit = ">=3"
-pytest = "^7.0"
-pytest-cov = "^3.0"
-
-[tool.poetry.group.docs]
-optional = true
-
-[tool.poetry.group.docs.dependencies]
-myst-parser = ">=0.16"
-sphinx = ">=4.0"
-sphinx-rtd-theme = ">=1.0"
-
-
-[tool.poetry.group.wordcloud.dependencies]
-janome = "^0.5.0"
-wordcloud = "^1.9.2"
-
-[tool.poetry.group.notebook]
-optional = true
-
-[tool.poetry.group.notebook.dependencies]
-scikit-learn = "^1.3.1"
-ipykernel = "^6.25.2"
-jupyter = "^1.0.0"
-matplotlib = "^3.8.0"
-matplotx = "^0.3.10"
-seaborn = "^0.13.0"
-
-[tool.semantic_release]
-branch = "main"
-version_toml = ["pyproject.toml:tool.poetry.version"]
-version_variable = "src/ut_course_catalog/__init__.py:__version__"
-build_command = "pip install poetry && poetry build"
-
-[tool.semantic_release.changelog]
-exclude_commit_patterns = [
-    "chore*",
-    "ci*",
+[dependency-groups]
+dev = [
+  "coverage",
+  "packaging-34j[test]",
+  "pre-commit",
+  "pytest",
+  "pytest-cov",
+  "ty",
+]
+docs = [
+  "packaging-34j[docs]",
+]
+notebook = [
+  "ipykernel>=6.25.2,<7",
+  "jupyter>=1,<2",
+  "matplotlib>=3.8,<4",
+  "matplotx>=0.3.10,<1",
+  "scikit-learn>=1.3.1,<2",
+  "seaborn>=0.13,<1",
+]
+wordcloud = [
+  "janome>=0.5,<1",
+  "wordcloud>=1.9.2,<2",
 ]
 
-[tool.semantic_release.changelog.environment]
-keep_trailing_newline = true
+[tool.ruff]
+extend = ".venv/ruff.toml"
+exclude = [ "docs/conf.py", "ut-course-catalog-tutorial.ipynb" ]
+lint.select = [ "E4", "E7", "E9", "F" ]
 
-[tool.pytest.ini_options]
-addopts = "-v -Wdefault --cov=ut_course_catalog --cov-report=term-missing:skip-covered"
-pythonpath = ["src"]
+[tool.pyproject-fmt]
+max_supported_python = "3.14"
 
-[tool.coverage.run]
-branch = true
+[tool.ty]
+terminal.error-on-warning = true
 
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "@overload",
-    "if TYPE_CHECKING",
-    "raise NotImplementedError",
-    'if __name__ == "__main__":',
+[tool.pytest]
+ini_options.pythonpath = [ "src" ]
+ini_options.addopts = "-v -Wdefault --cov=ut_course_catalog --cov-report=term-missing:skip-covered"
+
+[tool.coverage]
+run.branch = true
+report.exclude_lines = [
+  "@overload",
+  'if __name__ == "__main__"',
+  "if TYPE_CHECKING",
+  "pragma: no cover",
+  "raise NotImplementedError",
 ]
-
-[tool.isort]
-profile = "black"
-known_first_party = ["ut_course_catalog", "tests"]
-
-[tool.autoflake]
-expand_star_imports = true
-remove_all_unused_imports = true
-
-[tool.mypy]
-check_untyped_defs = true
-disallow_any_generics = true
-disallow_incomplete_defs = true
-disallow_untyped_defs = true
-mypy_path = "src/"
-no_implicit_optional = true
-show_error_codes = true
-warn_unreachable = true
-warn_unused_ignores = true
-exclude = [
-    'docs/.*',
-    'setup.py',
-]
-
-[[tool.mypy.overrides]]
-module = "tests.*"
-allow_untyped_defs = true
-
-[[tool.mypy.overrides]]
-module = "docs.*"
-ignore_errors = true
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"

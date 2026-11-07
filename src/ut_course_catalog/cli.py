@@ -40,10 +40,6 @@ def convert(name: str) -> None:
 
 async def _download(min_interval: float) -> None:
     params = utcc.SearchParams()
-    async with utcc.UTCourseCatalog(
-        min_interval=timedelta(seconds=min_interval)
-    ) as catalog:
+    async with utcc.UTCourseCatalog(min_interval=timedelta(seconds=min_interval)) as catalog:
         t = datetime.now().strftime("%Y%m%d%H%M%S")
-        await catalog.fetch_and_save_search_detail_all_pandas(
-            params, filename=f"all_{t}.pkl"
-        )
+        await catalog.fetch_and_save_search_detail_all_pandas(params, filename=f"all_{t}.pkl")

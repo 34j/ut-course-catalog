@@ -1,1 +1,163 @@
 # Changelog
+
+## v0.2.25 (2024-11-15)
+
+### Fix
+
+- Update dependency tqdm to v4.67.0 (#116) ([`ad4ed83`](https://github.com/34j/ut-course-catalog/commit/ad4ed83fca020468096f7544edb3b7d1591dff00))
+
+## v0.2.24 (2024-11-15)
+
+### Fix
+
+- Update dependency aiohttp to v3.11.2 (#115) ([`aca1c73`](https://github.com/34j/ut-course-catalog/commit/aca1c73dc6d135af37b47fce7ef5be3cfd5c2e6d))
+
+## v0.2.23 (2024-11-15)
+
+### Fix
+
+- Update dependency rich to v13.9.4 (#114) ([`894f1f3`](https://github.com/34j/ut-course-catalog/commit/894f1f32c65ee0ae5cd2bec95808c86b8e28fc7d))
+
+## v0.2.22 (2024-11-01)
+
+### Fix
+
+- Update dependency tenacity to v8.5.0 (#108) ([`7770619`](https://github.com/34j/ut-course-catalog/commit/7770619671b11dca42b6a8af63d42bfc93a4e3d7))
+
+## v0.2.21 (2024-11-01)
+
+### Fix
+
+- Update dependency rich to v13.9.3 (#107) ([`e3bbfde`](https://github.com/34j/ut-course-catalog/commit/e3bbfde26fba6df1b0d04800a49239f4a17aebaf))
+
+## v0.2.20 (2024-11-01)
+
+### Fix
+
+- Update dependency aiohttp-client-cache to ^0.12.0 (#106) ([`0b0084f`](https://github.com/34j/ut-course-catalog/commit/0b0084fa5e515ab46fd2980a02c72ecb6bf854fa))
+
+## v0.2.19 (2024-11-01)
+
+### Fix
+
+- Update dependency aiohttp to v3.10.10 (#105) ([`e652383`](https://github.com/34j/ut-course-catalog/commit/e65238353091902842107b6654bc61a1852f5e38))
+
+## v0.2.18 (2024-10-30)
+
+### Fix
+
+- Update dependency tqdm to v4.66.6 (#94) ([`422b7d4`](https://github.com/34j/ut-course-catalog/commit/422b7d400028a7dc16adb1f7ec93e39449157e60))
+
+## v0.2.17 (2024-10-30)
+
+### Fix
+
+- Update dependency pandas to v2.2.3 (#93) ([`0e38b07`](https://github.com/34j/ut-course-catalog/commit/0e38b0790ab772c512eaec4a08502daf024f3e90))
+
+## v0.2.16 (2024-03-26)
+
+### Fix
+
+- Update dependency aiohttp-client-cache to ^0.11.0 (#87) ([`955b921`](https://github.com/34j/ut-course-catalog/commit/955b921cf833aceba83190bbfaa37b83ded0d32b))
+
+## v0.2.15 (2024-03-25)
+
+### Fix
+
+- Update dependency tqdm to v4.66.2 (#82) ([`3291ae8`](https://github.com/34j/ut-course-catalog/commit/3291ae853f9ede40ef5368983c9ff02c9aa5009f))
+
+## v0.2.14 (2024-03-25)
+
+### Fix
+
+- Update dependency rich to v13.7.1 (#81) ([`d19e428`](https://github.com/34j/ut-course-catalog/commit/d19e4287893343c783c04b4c3be6591443616333))
+
+## v0.2.13 (2024-03-25)
+
+### Fix
+
+- Update dependency pandas to v2.2.1 (#80) ([`da15c34`](https://github.com/34j/ut-course-catalog/commit/da15c34c5ff9ff187b4629ff0932dedfe5890ae2))
+
+## v0.2.12 (2024-01-30)
+
+### Fix
+
+- Update dependency aiohttp to v3.9.3 (#69) ([`7665152`](https://github.com/34j/ut-course-catalog/commit/7665152ec65de9d5f49ae8844aec986333fc0c09))
+
+## v0.2.11 (2024-01-29)
+
+### Fix
+
+- Update dependency aiohttp to v3.9.2 (#68) ([`baa988b`](https://github.com/34j/ut-course-catalog/commit/baa988ba99900a39a7ec443617631fcddcb44010))
+
+## v0.2.10 (2024-01-20)
+
+### Fix
+
+- Update dependency pandas to v2.2.0 (#63) ([`de18632`](https://github.com/34j/ut-course-catalog/commit/de18632f35f227357e59b58c5cc38a55887c6078))
+
+## v0.2.9 (2024-01-18)
+
+### Fix
+
+- Update dependency beautifulsoup4 to v4.12.3 (#61) ([`fc4abad`](https://github.com/34j/ut-course-catalog/commit/fc4abad0e2d5a9d532c6fa3279f782475d45d7bf))
+
+## v0.2.8 (2023-12-09)
+
+### Fix
+
+- Update python to ^3.9, &lt;3.13 (#8) ([`f32c08e`](https://github.com/34j/ut-course-catalog/commit/f32c08edc7b72a4373951141744018a08c9df4e9))
+
+## v0.2.7 (2023-12-08)
+
+### Fix
+
+- Update dependency pandas to v2.1.4 (#40) ([`5d36feb`](https://github.com/34j/ut-course-catalog/commit/5d36feb2ac7284d263465c1e9b1ab42fbc995bce))
+
+## v0.2.6 (2023-11-26)
+
+### Fix
+
+- Update dependency aiohttp to v3.9.1 (#33) ([`076f30b`](https://github.com/34j/ut-course-catalog/commit/076f30bc5d3b2f03f2b13e4f0259033459db53e5))
+
+## v0.2.5 (2023-11-18)
+
+### Fix
+
+- Update dependency aiohttp to v3.9.0 (#31) ([`96178b5`](https://github.com/34j/ut-course-catalog/commit/96178b55befc6fdae184fff14fcde9c19c822c8f))
+
+## v0.2.4 (2023-11-15)
+
+### Fix
+
+- Update dependency rich to v13.7.0 (#29) ([`7e2b051`](https://github.com/34j/ut-course-catalog/commit/7e2b051e17aba8d554cbf86c1c065b212f2fb7e5))
+
+## v0.2.3 (2023-11-11)
+
+### Fix
+
+- Update dependency pandas to v2.1.3 (#27) ([`4805e95`](https://github.com/34j/ut-course-catalog/commit/4805e95763ff64f8cf0390446171b2b80c258a7a))
+
+## v0.2.2 (2023-10-31)
+
+### Fix
+
+- Update dependency aiohttp-client-cache to ^0.10.0 (#22) ([`3a5ddf9`](https://github.com/34j/ut-course-catalog/commit/3a5ddf90dd52d4ab32bd61927d0b6f067d019c34))
+
+## v0.2.1 (2023-10-27)
+
+### Fix
+
+- Update dependency pandas to v2.1.2 (#21) ([`251fcde`](https://github.com/34j/ut-course-catalog/commit/251fcde76d510a2a84784e55fb9752a16b70741a))
+
+## v0.2.0 (2023-10-10)
+
+### Feature
+
+- Trigger release ([`37635d3`](https://github.com/34j/ut-course-catalog/commit/37635d3616ffc06296de5020ba1fdbb33db2faaa))
+
+## v0.1.0 (2023-10-10)
+
+### Feature
+
+- Migrate code (#1) ([`8577667`](https://github.com/34j/ut-course-catalog/commit/8577667cb716e38849e466431afba89ca7ba3c23))
