@@ -5,7 +5,8 @@ from collections.abc import AsyncIterable, Awaitable, Callable, Coroutine, Itera
 from datetime import datetime, timedelta
 from enum import Enum, IntEnum
 from functools import wraps
-from typing import TypeVar
+from inspect import iscoroutinefunction
+from typing import Any, TypeVar, cast
 
 from typing_extensions import ParamSpec
 
@@ -97,15 +98,15 @@ class RateLimitter:
         self,
         func: WrappedFn[WrappedFnParam, WrappedFnResult]
         | WrappedAwaitableFn[WrappedFnParam, WrappedFnResult],
-    ) -> WrappedFn[WrappedFnParam, WrappedFnResult]:
+    ) -> Any:
         @wraps(func)
         async def wrapper(
             *args: WrappedFnParam.args, **kwargs: WrappedFnParam.kwargs
         ) -> WrappedFnResult:
             await self.wait()
-            if asyncio.iscoroutinefunction(func):
+            if iscoroutinefunction(func):
                 return await func(*args, **kwargs)
-            return func(*args, **kwargs)
+            return cast(Any, func)(*args, **kwargs)
 
         return wrapper
 
@@ -118,11 +119,11 @@ class RateLimitter:
 
 
 def async_for_task(async_iterable: AsyncIterable[T]) -> Iterable[asyncio.Task[T]]:
-    iterator = type(async_iterable).__aiter__(async_iterable)
+    iterator = async_iterable.__aiter__()
     running = True
     while running:
         try:
-            coro = type(iterator).__anext__(iterator)
+            coro = iterator.__anext__()
             if asyncio.iscoroutine(coro):
                 yield asyncio.create_task(coro)
         except StopAsyncIteration:
@@ -132,11 +133,11 @@ def async_for_task(async_iterable: AsyncIterable[T]) -> Iterable[asyncio.Task[T]
 def async_iterable_to_iterable(
     async_iterable: AsyncIterable[T],
 ) -> Iterable[Coroutine[None, None, T]]:
-    iterator = type(async_iterable).__aiter__(async_iterable)
+    iterator = async_iterable.__aiter__()
     running = True
     while running:
         try:
-            coro = type(iterator).__anext__(iterator)
+            coro = iterator.__anext__()
             if asyncio.iscoroutine(coro):
                 yield coro
         except StopAsyncIteration:

@@ -14,6 +14,7 @@ from enum import Enum
 from inspect import isawaitable
 from logging import Logger, getLogger
 from pathlib import Path
+from types import TracebackType
 from typing import (
     Any,
     NamedTuple,
@@ -21,6 +22,7 @@ from typing import (
     Self,
     TypeVar,
     Union,
+    cast,
 )
 
 import aiofiles
@@ -150,9 +152,8 @@ class CommonCode(str):
             "ED": Faculty.教育学部,
             "PH": Faculty.薬学部,
         }
-        if self.institution == Institution.学部前期課程:
-            if code == "AS":
-                return Faculty.教養学部前期課程
+        if self.institution == Institution.学部前期課程 and code == "AS":
+            return Faculty.教養学部前期課程
         if self.institution == Institution.大学院:
             if code in g_faculties:
                 return g_faculties[code]
@@ -216,7 +217,7 @@ class CommonCode(str):
 
     @property
     def department_name(self) -> str:
-        return CommonCode.parse_department(self.faculty, self.department_code)
+        return CommonCode.parse_department(self.faculty, self.department_code or "")
 
     @property
     def small_category(self) -> str | None:
@@ -263,7 +264,7 @@ class CommonCode(str):
         }
 
     @staticmethod
-    def parse_department(faculty: Faculty, department_code: str) -> dict[Faculty, dict[str, str]]:
+    def parse_department(faculty: Faculty, department_code: str) -> str:
         d = {
             Faculty.教養学部前期課程: {
                 "FC": "基礎科目",
@@ -652,11 +653,13 @@ def _parse_weekday_period(period_text: str) -> set[tuple[Weekday, int]]:
         p = int(reres.group())
         return w, p
 
-    result = set()
+    result: set[tuple[Weekday, int]] = set()
     for item in period_texts:
         if not item:
             return set()
-        result.add(parse_one(item))
+        parsed = parse_one(item)
+        if parsed is not None:
+            result.add(parsed)
     return result
 
 
@@ -697,12 +700,17 @@ class UTCourseCatalog:
         await self.session.__aenter__()
         return self
 
-    async def __aexit__(self, *args: object) -> None:
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         self._check_client()
         if self.session is None:
             raise RuntimeError("__aenter__ not called")
 
-        await self.session.__aexit__(*args)
+        await self.session.__aexit__(exc_type, exc_val, exc_tb)
 
     def _check_client(self) -> None:
         if not self.session:
@@ -762,7 +770,9 @@ class UTCourseCatalog:
         if params.学期:
             facet["semester_codes"] = [s.value for s in iterable_or_type_to_iterable(params.学期)]
         if params.時限:
-            facet["period_codes"] = [x - 1 for x in iterable_or_type_to_iterable(params.時限)]
+            facet["period_codes"] = [
+                x - 1 for x in cast(Iterable[int], iterable_or_type_to_iterable(params.時限))
+            ]
         if params.曜日 is not None:
             facet["wday_codes"] = [
                 x.value * 100 + 1000 for x in iterable_or_type_to_iterable(params.曜日)
@@ -835,7 +845,9 @@ class UTCourseCatalog:
                     code_cell_children = list(code_cell.children)
                     yield SearchResultItem(
                         ねらい=_format_description(
-                            card.find(class_="catalog-search-result-card-body-text").text
+                            _ensure_found(
+                                card.find(class_="catalog-search-result-card-body-text")
+                            ).text
                         ),
                         時間割コード=code_cell_children[1].text,
                         共通科目コード=CommonCode(code_cell_children[3].text),
@@ -1012,7 +1024,7 @@ class UTCourseCatalog:
         params: SearchParams,
         *,
         use_tqdm: bool = True,
-        on_initial_request: None | (Callable[[SearchResult], Awaitable | None]) = None,
+        on_initial_request: Callable[[SearchResult], Awaitable | None] | None = None,
     ) -> AsyncIterable[SearchResultItem]:
         """Fetch all search results by repeatedly calling `fetch_search`.
 
@@ -1074,7 +1086,7 @@ class UTCourseCatalog:
         *,
         year: int = current_fiscal_year(),
         use_tqdm: bool = True,
-        on_initial_request: None | (Callable[[SearchResult], Awaitable[None] | None]) = None,
+        on_initial_request: Callable[[SearchResult], Awaitable[None] | None] | None = None,
         on_detail_request: Callable[[Details], Awaitable[None] | None] | None = None,
     ) -> Iterable[Details]:
         """Fetch all search results by repeatedly calling `fetch_search` and `fetch_detail`.
@@ -1153,7 +1165,7 @@ class UTCourseCatalog:
         year: int = current_fiscal_year(),
         filename: str | None = None,
         use_tqdm: bool = True,
-        on_initial_request: None | (Callable[[SearchResult], Awaitable | None]) = None,
+        on_initial_request: Callable[[SearchResult], Awaitable | None] | None = None,
     ) -> Iterable[Details]:
         """Fetch all search results by repeatedly calling `fetch_search` and `fetch_detail` and save them to a PKL file.
         The filename is params.id() + ".pkl" if not specified.
@@ -1205,7 +1217,7 @@ class UTCourseCatalog:
         year: int = current_fiscal_year(),
         filename: str | None = None,
         use_tqdm: bool = True,
-        on_initial_request: None | (Callable[[SearchResult], Awaitable | None]) = None,
+        on_initial_request: Callable[[SearchResult], Awaitable | None] | None = None,
     ) -> DataFrame:
         data = await self.fetch_and_save_search_detail_all(
             params,
