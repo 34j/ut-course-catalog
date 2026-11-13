@@ -54,7 +54,7 @@ docs = [
   "packaging-34j[docs]",
 ]
 notebook = [
-  "ipykernel>=6.25.2,<7",
+  "ipykernel>=6.31.0,<7",
   "jupyter>=1,<2",
   "matplotlib>=3.8,<4",
   "matplotx>=0.3.10,<1",
