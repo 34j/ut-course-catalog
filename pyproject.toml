@@ -23,7 +23,7 @@ classifiers = [
 ]
 dependencies = [
   "aiofiles>=23.2.1,<24",
-  "aiohttp>=3.8.6,<4",
+  "aiohttp>=3.14.5,<4",
   "aiohttp-client-cache[all]>=0.12,<1",
   "beautifulsoup4>=4.12.2,<5",
   "click>=8.1.7,<9",
