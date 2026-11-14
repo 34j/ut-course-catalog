@@ -62,7 +62,7 @@ notebook = [
   "seaborn>=0.13,<1",
 ]
 wordcloud = [
-  "janome>=0.5,<1",
+  "janome>=0.5.2,<1",
   "wordcloud>=1.9.2,<2",
 ]
 
