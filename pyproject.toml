@@ -63,7 +63,7 @@ notebook = [
 ]
 wordcloud = [
   "janome>=0.5,<1",
-  "wordcloud>=1.9.2,<2",
+  "wordcloud>=1.9.6,<2",
 ]
 
 [tool.ruff]
